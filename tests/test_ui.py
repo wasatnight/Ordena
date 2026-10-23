@@ -33,8 +33,10 @@ class InterfaceTests(unittest.TestCase):
         self.window.set_folder(str(self.root)); self.wait_task()
     def test_english_default_and_spanish_persists(self):
         self.assertEqual(self.window.choose.text(), 'Choose folder')
+        self.assertEqual(self.window.tagline.text(), 'Your folders, organized')
         self.window.language.setCurrentIndex(1); app.processEvents()
         self.assertEqual(self.window.choose.text(), 'Seleccionar carpeta')
+        self.assertEqual(self.window.tagline.text(), 'Tus carpetas ordenadas')
         self.window.close()
         self.window = Window(self.base / 'settings')
         self.assertEqual(self.window.settings.language, 'es')
@@ -171,12 +173,12 @@ class InterfaceTests(unittest.TestCase):
 
     def test_language_popup_click_changes_language_with_blush_selection(self):
         from PySide6.QtGui import QPalette
-        from ordena.theme import ACCENT
+        from ordena.theme import SELECTION
         combo = self.window.language
         combo.showPopup(); app.processEvents()
         view = combo.view()
         self.assertTrue(view.isVisible())
-        self.assertEqual(view.palette().color(QPalette.Highlight).name(), ACCENT)
+        self.assertEqual(view.palette().color(QPalette.Highlight).name(), SELECTION)
         QTest.mouseClick(view.viewport(), Qt.LeftButton, pos=view.visualRect(view.model().index(1, 0)).center())
         app.processEvents()
         self.assertEqual(self.window.settings.language, 'es')
