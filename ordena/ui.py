@@ -11,7 +11,7 @@ from .rules import Rule, validate
 from .settings import Settings
 from .journal import Journal
 from .workers import Task
-from .theme import STYLE, ASSETS, ACCENT, configure_app
+from .theme import STYLE, ASSETS, ACCENT, MUTED, configure_app
 from .controls import FileDelegate, CategoryCheckBox
 
 
@@ -67,9 +67,9 @@ class HelpDialog(QDialog):
         self.browser = QTextBrowser()
         self.browser.setOpenExternalLinks(False)
         self.browser.document().setDefaultStyleSheet(
-            'body {color:#e8edf5; font-family:Segoe UI; font-size:11pt;}'
-            'h2,h3 {color:#f4e1e9;} p {line-height:1.5;}'
-            'code {color:#f4e1e9;} td {padding:7px;}')
+            'body {color:#243b63; font-family:Segoe UI; font-size:11pt;}'
+            'h2,h3 {color:#243b63;} p {line-height:1.5;}'
+            'code {color:#243b63;} td {padding:7px;}')
         self.browser.setHtml(tr('help_body', language))
         layout.addWidget(self.browser)
         buttons = QDialogButtonBox()
@@ -258,7 +258,7 @@ class Window(QMainWindow):
                     item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
                     item.setCheckState(Qt.Checked if entry.selected else Qt.Unchecked)
                 if column == 5:
-                    item.setForeground(QColor(ACCENT if entry.selected else '#a5b8c9'))
+                    item.setForeground(QColor(ACCENT if entry.selected else MUTED))
                 self.table.setItem(row, column, item)
         self.table.blockSignals(False)
         self.summary.setText(self.t('summary', count=len(entries), size=size_text(sum(e.size for e in entries)), selected=sum(e.selected for e in entries)))
@@ -295,7 +295,7 @@ class Window(QMainWindow):
                     state = self.table.item(row, 5)
                     state.setText(self.t(entry.status if entry.selected else 'excluded'))
                     state.setToolTip(state.text())
-                    state.setForeground(QColor(ACCENT if entry.selected else '#a5b8c9'))
+                    state.setForeground(QColor(ACCENT if entry.selected else MUTED))
         finally:
             self.table.blockSignals(False)
         entries = self.plan.entries

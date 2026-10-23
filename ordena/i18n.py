@@ -2,7 +2,7 @@
 from .help_content import ENGLISH_HELP, SPANISH_HELP
 
 TEXT = {
- 'tagline': ('A clear folder. A calmer workspace.', 'Una carpeta ordenada. Un espacio más tranquilo.'),
+ 'tagline': ('Your folders, organized', 'Tus carpetas ordenadas'),
  'choose': ('Choose folder', 'Seleccionar carpeta'),
  'drop': ('Choose a folder or drop one here', 'Selecciona una carpeta o arrástrala aquí'),
  'hint': ('Preview first. Only selected files move when you click Organize.', 'Primero revisa la vista previa. Solo se mueven los archivos seleccionados al pulsar Organizar.'),
@@ -63,7 +63,7 @@ TEXT = {
  'Images': ('Images', 'Imágenes'), 'Documents': ('Documents', 'Documentos'),
  'Videos': ('Videos', 'Videos'), 'Audio': ('Audio', 'Audio'),
  'Archives': ('Archives', 'Comprimidos'), 'Installers': ('Installers', 'Instaladores'),
- 'offline': ('LOCAL & OFFLINE  /  v1.1.0', 'LOCAL Y SIN INTERNET  /  v1.1.0'),
+ 'offline': ('LOCAL & OFFLINE  /  v1.1.1', 'LOCAL Y SIN INTERNET  /  v1.1.1'),
  'rule_hint': ('Names below are the actual destination folder names. Changing the interface language does not rename folders.', 'Estos son los nombres reales de las carpetas de destino. Cambiar el idioma de la interfaz no renombra carpetas.'),
 }
 
