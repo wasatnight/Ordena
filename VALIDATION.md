@@ -16,7 +16,16 @@ The Windows build embeds the original nine ICO images (16, 20, 24, 32, 40, 48, 6
 
 English and Spanish source-window captures and the help dialog were inspected. The original mint accent and whole-row selection highlight are absent from the new preview; instructional copy is in the offline help dialog. File selection does not recreate table items or category controls.
 
-Independent Windows results: see the final build linked from GitHub Actions: https://github.com/wasatnight/Ordena/actions. This report will be updated with its run and artifact provenance when complete.
+## Independent Windows result: passed
+
+**44 tests passed, no skips or failures**, in 23.432 seconds on the Windows runner. Hard-link and junction cases both passed. Build verification confirmed all nine original ICO frames embedded in the executable. Startup with Python removed from PATH succeeded and confirmed version 1.1.0 plus all packaged icons rendered successfully.
+
+- Run: https://github.com/wasatnight/Ordena/actions/runs/39935344875
+- Tested application source commit: `0a357bfac82a673d993930f7f2c47f6ea3b3d0d7`.
+- Verified artifact: https://github.com/wasatnight/Ordena/actions/runs/39935344875/artifacts/12494005484
+- Original artifact SHA-256: `7a64f687db430818862736215d3670144e2d4351befcea22f41a231c9bde713c`.
+
+The supplied portable repackages that verified artifact under an Ordena folder and refreshes the documentation. Executable and DLL/PYD bytes are unchanged. Source and portable ZIP integrity, exact executable icon resources and correspondence with the published repository are checked before delivery. Subsequent report-only commits do not change the tested application code.
 
 ## Remaining distribution work
 
