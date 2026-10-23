@@ -1,0 +1,35 @@
+name: Windows validation
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Create isolated environment
+        shell: pwsh
+        run: |
+          python -m venv .venv
+          .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+      - name: Test and build
+        shell: pwsh
+        run: .\build.ps1
+      - name: Check executable without Python on PATH
+        shell: pwsh
+        run: |
+          $env:ORDENA_DATA_DIR = "$env:RUNNER_TEMP\ordena-smoke"
+          $env:PATH = "$env:SystemRoot\System32;$env:SystemRoot"
+          $process = Start-Process -FilePath "$PWD\dist\Ordena\Ordena.exe" -ArgumentList '--smoke-test' -WindowStyle Hidden -PassThru
+          if (-not $process.WaitForExit(20000)) { throw 'Executable startup timed out' }
+          if ($process.ExitCode -ne 0) { throw "Executable exited with $($process.ExitCode)" }
+          if (-not (Test-Path "$env:ORDENA_DATA_DIR\history.sqlite3")) { throw 'UI did not initialize its journal' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Ordena-Windows-portable
+          path: dist/Ordena/
