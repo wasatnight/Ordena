@@ -36,3 +36,6 @@ Instala Python 3.12 de 64 bits y abre PowerShell en esta carpeta:
 Selecciona `.venv` como intérprete en VS Code. `build.ps1` genera `dist/Ordena/Ordena.exe`; distribuye la carpeta completa. Puedes pasar `-Python RUTA_AL_PYTHON_DEL_ENTORNO` al script de compilación.
 
 Consulta [VALIDATION.md](VALIDATION.md) para conocer pruebas y limitaciones, [CONTEXTO_PROYECTO.md](CONTEXTO_PROYECTO.md) para continuar el proyecto y [README.md](README.md) para los detalles técnicos. No se probaron carpetas personales. Quedan fuera de esta versión vigilancia automática, inicio con Windows, recursión, IA, eliminación de duplicados, nube y donaciones. Instalador, firma de editor y prueba en otro Windows están pendientes.
+
+Validación independiente completada: **35 pruebas aprobadas, compilación y arranque del ejecutable sin Python en PATH**. [Ver ejecución en Windows](https://github.com/wasatnight/Ordena/actions/runs/39929305957). El portable entregado proviene de esa compilación.
+

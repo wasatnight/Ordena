@@ -43,7 +43,7 @@ En esta sesión concreta el entorno está en `..\..\.venv`, fuera de la carpeta 
 
 ## Pendientes
 
-- Probar enlaces físicos/junctions reales en un Windows que permita crearlos; el sandbox bloqueó su creación y esas pruebas se omiten con explicación.
+- Enlaces físicos y junctions verificados en CI Windows: 35 pruebas aprobadas sin omisiones. Falta verificar enlaces simbólicos reales y más variantes de sistemas de archivos.
 - Validar en un Windows limpio y en carpetas grandes/unidades externas; revisión de accesibilidad adicional.
 - Definir licencia del código propio con el autor. Gratuito no implica por sí solo licencia de código abierto.
 - Instalador, firma Authenticode y eventual distribución certificada.
@@ -52,3 +52,6 @@ En esta sesión concreta el entorno está en `..\..\.venv`, fuera de la carpeta 
 ## Estado para otra sesión
 
 Código y pruebas completos en esta carpeta, con empaquetado portable disponible en `dist/Ordena`. Repositorio público creado: https://github.com/wasatnight/Ordena. El conector de GitHub respondió 403 al intentar escribir en el nuevo repositorio; se usa el navegador autenticado para subir el código. No hay claves ni credenciales dentro del proyecto. El historial y preferencias de prueba se mantuvieron fuera del código entregado.
+
+La validación independiente de Windows terminó correctamente: 35 pruebas aprobadas, compilación y arranque sin Python en PATH. Ejecución: https://github.com/wasatnight/Ordena/actions/runs/39929305957. El ZIP portable de la entrega proviene de ese artefacto verificado; la compilación local no pudo confirmar arranque en el sandbox. Repositorio publicado completo y copia de código local comparada con el árbol remoto.
+

@@ -12,7 +12,7 @@ Crash recovery includes a real child process that writes its intent, performs a 
 
 Eight Qt interface tests exercise English default, persistent Spanish selection, translated headings, preserved physical destinations and exclusions, category selection, rule editing, invalidation on folder change, background work, confirmation flow, organization, summary, undo, refresh and scan cancellation.
 
-The two skipped tests require actual hard-link and junction creation. The sandbox returned access denied or disallowed creation. Attribute checks and other link-related exclusions are implemented, but those two end-to-end cases require another Windows environment.
+The two locally skipped tests require actual hard-link and junction creation. Both passed on the independent Windows GitHub Actions runner: **35 tests passed, no skips, no failures**, using Python 3.12.10.
 
 ## Build and visual checks
 
@@ -20,10 +20,13 @@ The two skipped tests require actual hard-link and junction creation. The sandbo
 - English and Spanish Qt window captures inspected for layout/readability. Assets use synthetic sample files.
 - PyInstaller successfully generated `dist/Ordena/Ordena.exe` and its shared-library directory on Windows.
 - A standalone executable startup attempt in this sandbox timed out without producing its expected local journal. A successful executable startup is **not yet confirmed** here. No security settings were changed or bypassed.
-- The Windows CI workflow builds and checks startup in an independent Windows runner. Its results should be consulted before calling the portable build verified.
+- Independent Windows CI succeeded: all 35 tests passed, packaging succeeded, and the executable initialized its UI/journal and exited successfully with Python removed from PATH. The delivered portable ZIP is the artifact built and verified by that runner. Run: https://github.com/wasatnight/Ordena/actions/runs/39929305957 (commit 78bd360e7aeff43e846ca26522226c34d37be977).
 
 ## Remaining checks
 
-Clean Windows installation; actual hard links/junctions where creation is allowed; very large folders and files; external/network filesystems; accessibility; installer; Authenticode signing. The portable build is unsigned. Cancellation waits for the current file's checksum/move before stopping future files.
+Interactive testing on a separate personal Windows installation; actual symbolic links; very large folders and files; external/network filesystems; accessibility; installer; Authenticode signing. The portable build is unsigned. Cancellation waits for the current file's checksum/move before stopping future files.
 
 The source code and dependencies run locally without network access. Downloading dependencies and using GitHub/CI require network access during development.
+
+
+Portable provenance: the delivered archive repackages the verified CI artifact with updated README/validation documents; executable and DLL bytes are unchanged. Original CI artifact SHA-256: a8bd5efaaada4d42e02c61e306505db0ead9f57b0368c936ef44fc37d3dfac8c.

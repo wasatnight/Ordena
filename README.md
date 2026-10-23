@@ -44,7 +44,7 @@ Or run `python -m venv .venv`, then `.\.venv\Scripts\python.exe -m pip install -
 .\build.ps1
 ```
 
-The build produces `dist/Ordena/Ordena.exe`; distribute its entire folder. `--smoke-test` opens the app then closes it automatically for startup verification. Tests use synthetic files in temporary directories only. See [VALIDATION.md](VALIDATION.md) for actual results and limitations, and [CONTEXTO_PROYECTO.md](CONTEXTO_PROYECTO.md) to continue development.
+The build produces `dist/Ordena/Ordena.exe`; distribute its entire folder. `--smoke-test` opens the app then closes it automatically for startup verification. Tests use synthetic files in temporary directories only. All 35 tests, Windows packaging and executable startup without Python on PATH passed in [Windows CI](https://github.com/wasatnight/Ordena/actions/runs/39929305957). See [VALIDATION.md](VALIDATION.md) for actual results and limitations, and [CONTEXTO_PROYECTO.md](CONTEXTO_PROYECTO.md) to continue development.
 
 ## Structure
 
@@ -58,3 +58,4 @@ The build produces `dist/Ordena/Ordena.exe`; distribute its entire folder. `--sm
 Automatic watching, background/startup operation, recursion, AI, duplicate deletion, cloud sync and donations are deliberately deferred. Authenticode signing, an installer and testing on a separate clean Windows machine remain future distribution work.
 
 Author: Iván Solano. The author's source license is pending selection; no open-source license is granted solely by making the repository public. Third-party components retain their own licenses; see [TERCEROS.md](TERCEROS.md).
+
