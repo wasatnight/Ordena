@@ -1,8 +1,12 @@
 # Ordena
 
-**Version 1.1.0** · A free, offline Windows desktop app for organizing a mixed folder. Built with Python 3.12 and PySide6. **English is the initial language; choose Español in the top-right selector.** Language, category rules and last selected folder are remembered.
+**Version 1.1.1** · A free, offline Windows desktop app for organizing a mixed folder. Built with Python 3.12 and PySide6. **English is the initial language; choose Español in the top-right selector.** Language, category rules and last selected folder are remembered.
 
 [Instrucciones en español](README.es.md) · [What changed](CHANGELOG.md)
+
+## New in 1.1.1
+
+The entire interface now uses pale pink surfaces with blue text, including tables, menus, rule editing and help. The centered subtitle is **Your folders, organized** in English and **Tus carpetas ordenadas** in Spanish. The layout, original icon, stable selection behavior and offline help are preserved.
 
 ## New in 1.1.0
 

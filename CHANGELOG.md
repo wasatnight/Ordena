@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 — 2026-10-23
+
+- Corrected the requested palette: pale pink throughout the interface, with blue text and matching controls, popups, rule editor and help.
+- Shortened the subtitle to Your folders, organized / Tus carpetas ordenadas.
+- Preserved the layout, original application icon, stable selections and file safety behavior.
+
 ## 1.1.0 — 2026-10-23
 
 - Original Windows app icon, with nine sizes, set on the executable and application windows; explicit taskbar identity.

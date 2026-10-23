@@ -1,4 +1,4 @@
-# Ordena 1.1.0 — Español
+# Ordena 1.1.1 — Español
 
 Aplicación gratuita de escritorio para Windows que organiza una carpeta local. **Se abre inicialmente en inglés. Selecciona Español arriba a la derecha para traducir la interfaz.** Recuerda idioma, reglas y última carpeta seleccionada.
 
@@ -48,3 +48,7 @@ Las instrucciones se encuentran en el botón **?**, con pasos y ejemplos en el i
 
 Esta versión incorpora nueve pruebas de regresión de interfaz: 44 pruebas en total. Consulta [VALIDATION.md](VALIDATION.md) y las [ejecuciones de Windows](https://github.com/wasatnight/Ordena/actions) para los resultados de la versión actual.
 
+
+## Ajuste visual 1.1.1
+
+Toda la interfaz tiene fondos rosa claro y letras azules, incluidos tabla, menús, editor de categorías y ayuda. El subtítulo centrado dice «Tus carpetas ordenadas» en español y «Your folders, organized» en inglés. Se conservan distribución, icono, selecciones estables y ayuda.

@@ -1,32 +1,17 @@
-# Validation — Ordena 1.1.0
+# Validation — Ordena 1.1.1
 
 Date: 2026-10-23. Windows, Python 3.12, PySide6 6.10.2, PyInstaller 6.19.0.
 
-## Scope and local verification
+## Scope
 
-44 tests: 27 filesystem safety tests and 17 Qt interface tests. The original 35-test Windows baseline passed at https://github.com/wasatnight/Ordena/actions/runs/39929305957.
+Visual correction only: pale pink backgrounds throughout the app, blue text, matching menu/control/help colors and a shorter localized subtitle. Layout, original application ICO, selection behavior, rules, execution, journal and undo are preserved.
 
-The 1.1.0 interface tests passed locally, including nine new checks: real mouse clicks on a file name and checkbox; Space-key toggling; preserved scroll and table item identity; partial category selection followed by all/none clicks; centered brand/subtitle with matching font; opening bilingual help through the ? button; multi-size window icon; and actual selection through the styled language popup.
+The suite remains 44 tests: 27 filesystem safety checks and 17 Qt interface checks. The existing language tests additionally assert the exact new subtitles. All 17 interface tests passed locally; English/Spanish main windows and help were rendered and visually checked.
 
-The local full suite has two environment-specific skips: hard-link and junction creation are denied in the sandbox. Those cases are included in independent Windows CI. Tests only use synthetic files in temporary directories; personal folders are never organized.
+The Windows pipeline checks all 44 tests, the original nine executable ICO frames, startup without Python on PATH, version 1.1.1 and actual loading of packaged icon resources. Version 1.1.0 baseline: https://github.com/wasatnight/Ordena/actions/runs/39935344875.
 
-## Packaging checks
-
-The Windows build embeds the original nine ICO images (16, 20, 24, 32, 40, 48, 64, 128, 256 px). `tools/verify_build.py` compares the executable RT_ICON bytes with the source ICO frames. Runtime resources are bundled under `ordena/assets`. Startup without Python on PATH also confirms version 1.1.0 and actual rendering of every packaged icon resource through `smoke.json`.
-
-English and Spanish source-window captures and the help dialog were inspected. The original mint accent and whole-row selection highlight are absent from the new preview; instructional copy is in the offline help dialog. File selection does not recreate table items or category controls.
-
-## Independent Windows result: passed
-
-**44 tests passed, no skips or failures**, in 23.432 seconds on the Windows runner. Hard-link and junction cases both passed. Build verification confirmed all nine original ICO frames embedded in the executable. Startup with Python removed from PATH succeeded and confirmed version 1.1.0 plus all packaged icons rendered successfully.
-
-- Run: https://github.com/wasatnight/Ordena/actions/runs/39935344875
-- Tested application source commit: `0a357bfac82a673d993930f7f2c47f6ea3b3d0d7`.
-- Verified artifact: https://github.com/wasatnight/Ordena/actions/runs/39935344875/artifacts/12494005484
-- Original artifact SHA-256: `7a64f687db430818862736215d3670144e2d4351befcea22f41a231c9bde713c`.
-
-The supplied portable repackages that verified artifact under an Ordena folder and refreshes the documentation. Executable and DLL/PYD bytes are unchanged. Source and portable ZIP integrity, exact executable icon resources and correspondence with the published repository are checked before delivery. Subsequent report-only commits do not change the tested application code.
+Independent 1.1.1 Windows results and artifact provenance will be recorded here when its build completes. Current runs: https://github.com/wasatnight/Ordena/actions.
 
 ## Remaining distribution work
 
-Installer and Authenticode signing; manual testing on another personal Windows computer; actual symbolic links and more filesystem variants; large-folder/accessibility evaluation. Cancellation still waits for the current checksum/move. The app continues to run offline and remembers the same user settings/history location as 1.0.
+Installer and Authenticode signing; manual testing on another personal Windows installation; actual symbolic links and more filesystem variants; very large-folder/accessibility evaluation. All development inputs are synthetic temporary files. User files and preferences/history remain untouched during testing.
