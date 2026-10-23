@@ -1,42 +1,19 @@
 """Qt Widgets desktop interface. All filesystem work runs outside the GUI thread."""
 from pathlib import Path
-from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QColor, QFont
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor, QIcon
 from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QPushButton, QComboBox, QFrame, QTableWidget, QTableWidgetItem,
     QHeaderView, QAbstractItemView, QFileDialog, QMessageBox, QProgressBar,
-    QDialog, QDialogButtonBox, QCheckBox, QScrollArea, QTextEdit)
+    QDialog, QDialogButtonBox, QScrollArea, QTextEdit, QTextBrowser)
 from .i18n import tr
 from .rules import Rule, validate
 from .settings import Settings
 from .journal import Journal
 from .workers import Task
+from .theme import STYLE, ASSETS, ACCENT, configure_app
+from .controls import FileDelegate, CategoryCheckBox
 
-STYLE = '''
-QWidget { background: #101a24; color: #e5edf5; font-family: 'Segoe UI'; font-size: 10pt; }
-QMainWindow { background: #101a24; }
-QLabel#brand { font-size: 29pt; font-weight: 700; color: #63e2c3; }
-QLabel#subtitle { color: #a5b8c9; font-size: 11pt; }
-QLabel#eyebrow { color: #89a2b6; font-size: 9pt; font-weight: 600; }
-QLabel#path { background: #172533; border: 1px dashed #496379; border-radius: 12px; padding: 24px; font-size: 12pt; }
-QLabel#summary { color: #63e2c3; padding: 10px 0; font-size: 12pt; font-weight: 600; }
-QPushButton, QComboBox { background: #223444; border: 1px solid #395267; border-radius: 7px; padding: 9px 15px; }
-QPushButton:hover { background: #2e485b; border-color: #63e2c3; }
-QPushButton:disabled { color: #7e93a4; background: #1a2835; border-color: #263b4b; }
-QPushButton#primary { background: #63e2c3; color: #10231e; font-weight: 700; padding: 11px 27px; }
-QPushButton#primary:disabled { background: #2d6259; color: #a8beb9; }
-QTableWidget { background: #14222e; alternate-background-color: #182a38; border: 1px solid #2c4254; border-radius: 8px; gridline-color: #233949; }
-QTableWidget::item { padding: 6px; }
-QTableWidget::item:selected { background: #275950; color: white; }
-QHeaderView::section { background: #213442; color: #afc3d2; padding: 10px; border: none; font-weight: 600; }
-QProgressBar { background: #223444; border: 0; border-radius: 4px; height: 7px; text-align: center; }
-QProgressBar::chunk { background: #63e2c3; border-radius: 4px; }
-QTextEdit { background: #14222e; border: 1px solid #2c4254; border-radius: 6px; }
-QScrollArea { border: 0; }
-QCheckBox { spacing: 8px; padding: 7px 1px; }
-QCheckBox::indicator { width: 16px; height: 16px; }
-QToolTip { background: #253e50; color: white; border: 1px solid #63e2c3; }
-'''
 
 def size_text(size):
     for unit in ('B', 'KB', 'MB', 'GB', 'TB'):
@@ -80,9 +57,32 @@ class RuleDialog(QDialog):
         except ValueError as exc:
             QMessageBox.warning(self, tr('rules', self.language), tr(str(exc), self.language))
 
+class HelpDialog(QDialog):
+    def __init__(self, language, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(tr('help_title', language))
+        self.resize(740, 660)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(22, 20, 22, 20)
+        self.browser = QTextBrowser()
+        self.browser.setOpenExternalLinks(False)
+        self.browser.document().setDefaultStyleSheet(
+            'body {color:#e8edf5; font-family:Segoe UI; font-size:11pt;}'
+            'h2,h3 {color:#f4e1e9;} p {line-height:1.5;}'
+            'code {color:#f4e1e9;} td {padding:7px;}')
+        self.browser.setHtml(tr('help_body', language))
+        layout.addWidget(self.browser)
+        buttons = QDialogButtonBox()
+        close = buttons.addButton(tr('close', language), QDialogButtonBox.RejectRole)
+        close.clicked.connect(self.accept)
+        layout.addWidget(buttons)
+
+
 class Window(QMainWindow):
     def __init__(self, data_dir):
         super().__init__()
+        configure_app()
+        self.setWindowIcon(QIcon(str(ASSETS / "app.ico")))
         self.settings = Settings(data_dir)
         self.journal_path = Path(data_dir) / 'history.sqlite3'
         self.plan, self.task, self.mode = None, None, None
@@ -94,11 +94,26 @@ class Window(QMainWindow):
         content = QWidget(); self.setCentralWidget(content)
         layout = QVBoxLayout(content); layout.setContentsMargins(30, 22, 30, 22); layout.setSpacing(14)
         header = QHBoxLayout()
-        brand = QLabel('ordena.'); brand.setObjectName('brand'); header.addWidget(brand)
-        self.tagline = QLabel(); self.tagline.setObjectName('subtitle'); header.addWidget(self.tagline); header.addStretch()
+        left_balance = QWidget(); left_balance.setFixedWidth(186)
+        header.addWidget(left_balance)
+        title = QWidget(); title_layout = QVBoxLayout(title)
+        title_layout.setContentsMargins(0, 0, 0, 0); title_layout.setSpacing(0)
+        self.brand = QLabel('ordena.'); self.brand.setObjectName('brand'); self.brand.setAlignment(Qt.AlignCenter)
+        self.tagline = QLabel(); self.tagline.setObjectName('subtitle'); self.tagline.setAlignment(Qt.AlignCenter)
+        self.tagline.setWordWrap(True)
+        title_layout.addWidget(self.brand); title_layout.addWidget(self.tagline)
+        header.addWidget(title, 1)
+        controls = QWidget(); controls.setFixedWidth(186)
+        control_layout = QHBoxLayout(controls); control_layout.setContentsMargins(0, 0, 0, 0)
+        control_layout.setSpacing(10)
         self.language = QComboBox(); self.language.addItems(['English', 'Español'])
+        self.language.setFixedSize(140, 36)
         self.language.setCurrentIndex(self.settings.language == 'es')
-        self.language.currentIndexChanged.connect(self.change_language); header.addWidget(self.language)
+        self.language.currentIndexChanged.connect(self.change_language)
+        control_layout.addWidget(self.language)
+        self.help_button = QPushButton('?'); self.help_button.setObjectName('help'); self.help_button.setFixedSize(36, 36)
+        self.help_button.clicked.connect(self.show_help); control_layout.addWidget(self.help_button)
+        header.addWidget(controls, 0, Qt.AlignTop)
         layout.addLayout(header)
         self.path_label = QLabel(); self.path_label.setObjectName('path'); self.path_label.setWordWrap(True); self.path_label.setTextFormat(Qt.PlainText)
         self.path_label.setTextInteractionFlags(Qt.TextSelectableByMouse); layout.addWidget(self.path_label)
@@ -108,7 +123,6 @@ class Window(QMainWindow):
         actions.addStretch()
         self.edit = QPushButton(); self.edit.clicked.connect(self.edit_rules); actions.addWidget(self.edit)
         layout.addLayout(actions)
-        self.hint = QLabel(); self.hint.setObjectName('subtitle'); self.hint.setWordWrap(True); layout.addWidget(self.hint)
         self.summary = QLabel(); self.summary.setObjectName('summary'); layout.addWidget(self.summary)
         middle = QHBoxLayout()
         sidebar = QWidget(); sidebar.setFixedWidth(205); self.sidebar = QVBoxLayout(sidebar); self.sidebar.setContentsMargins(0, 0, 12, 0)
@@ -121,7 +135,10 @@ class Window(QMainWindow):
         self.preview_title = QLabel(); self.preview_title.setObjectName('eyebrow'); preview_layout.addWidget(self.preview_title)
         self.table = QTableWidget(0, 6); self.table.setAlternatingRowColors(True)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table.setSelectionMode(QAbstractItemView.NoSelection)
+        self.table.setItemDelegate(FileDelegate(self.table))
+        self.table.setMouseTracking(True)
+        self.table.cellEntered.connect(self.preview_hover)
         self.table.verticalHeader().hide(); self.table.setWordWrap(False)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
         self.table.horizontalHeader().setStretchLastSection(True)
@@ -142,12 +159,15 @@ class Window(QMainWindow):
         return tr(key, self.settings.language, **values)
     def retranslate(self):
         for widget, key in [(self.tagline,'tagline'), (self.choose,'choose'), (self.refresh,'refresh'),
-            (self.edit,'rules'), (self.hint,'hint'), (self.category_title,'categories'), (self.preview_title,'preview'),
+            (self.edit,'rules'), (self.category_title,'categories'), (self.preview_title,'preview'),
             (self.offline,'offline'), (self.cancel,'cancel'), (self.organize,'organize'), (self.undo_button,'undo')]:
             widget.setText(self.t(key))
         self.table.setHorizontalHeaderLabels([self.t(k) for k in ('file','type','size','current','target','status')])
         self.path_label.setText(self.settings.folder or self.t('drop'))
-        self.status.setText(self.t('idle'))
+        self.status.clear()
+        self.help_button.setToolTip(self.t('help_title'))
+        self.help_button.setAccessibleName(self.t('help_title'))
+        self.language.setAccessibleName(self.t('language'))
         self.render()
     def change_language(self, index):
         self.settings.language = 'es' if index else 'en'
@@ -201,7 +221,7 @@ class Window(QMainWindow):
     def received(self, result):
         if self.mode == 'scan':
             self.plan = result; self.render()
-            self.status.setText(self.t('scan_cancelled') if result.cancelled else self.t('idle'))
+            self.status.setText(self.t('scan_cancelled') if result.cancelled else '')
         else:
             self.plan = None; self.render()
             text = self.t('done', completed=result.completed, skipped=result.skipped, errors=len(result.errors))
@@ -238,7 +258,7 @@ class Window(QMainWindow):
                     item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
                     item.setCheckState(Qt.Checked if entry.selected else Qt.Unchecked)
                 if column == 5:
-                    item.setForeground(QColor('#63e2c3' if entry.selected else '#a5b8c9'))
+                    item.setForeground(QColor(ACCENT if entry.selected else '#a5b8c9'))
                 self.table.setItem(row, column, item)
         self.table.blockSignals(False)
         self.summary.setText(self.t('summary', count=len(entries), size=size_text(sum(e.size for e in entries)), selected=sum(e.selected for e in entries)))
@@ -248,7 +268,9 @@ class Window(QMainWindow):
         for rule in self.settings.rules:
             category_entries = [e for e in entries if e.category == rule.name and e.identity]
             count = len(category_entries)
-            check = QCheckBox(f'{self.t(rule.name)}  {count}')
+            check = CategoryCheckBox(f'{self.t(rule.name)}  {count}')
+            check.setProperty('category', rule.name)
+            check.setAccessibleName(self.t(rule.name))
             check.setToolTip(rule.name)
             check.setTristate(True)
             selected = sum(e.selected for e in category_entries)
@@ -256,16 +278,47 @@ class Window(QMainWindow):
             check.setEnabled(count > 0)
             check.stateChanged.connect(lambda state, name=rule.name: self.toggle_category(name, state))
             self.check_layout.addWidget(check); self.category_checks.append(check)
+    def preview_hover(self, row, column):
+        item = self.table.item(row, column)
+        enabled = item is not None and bool(item.flags() & Qt.ItemIsUserCheckable)
+        self.table.viewport().setCursor(Qt.PointingHandCursor if enabled else Qt.ArrowCursor)
+    def update_selection(self):
+        """Update states in place: keep the active item, scroll, and keyboard focus."""
+        if not self.plan:
+            return
+        self.table.blockSignals(True)
+        try:
+            for row, entry in enumerate(self.plan.entries):
+                if entry.identity:
+                    name = self.table.item(row, 0)
+                    name.setCheckState(Qt.Checked if entry.selected else Qt.Unchecked)
+                    state = self.table.item(row, 5)
+                    state.setText(self.t(entry.status if entry.selected else 'excluded'))
+                    state.setToolTip(state.text())
+                    state.setForeground(QColor(ACCENT if entry.selected else '#a5b8c9'))
+        finally:
+            self.table.blockSignals(False)
+        entries = self.plan.entries
+        self.summary.setText(self.t('summary', count=len(entries), size=size_text(sum(e.size for e in entries)), selected=sum(e.selected for e in entries)))
+        for check in self.category_checks:
+            files = [e for e in entries if e.category == check.property('category') and e.identity]
+            selected = sum(e.selected for e in files)
+            check.blockSignals(True)
+            check.setCheckState(Qt.Unchecked if not selected else Qt.Checked if selected == len(files) else Qt.PartiallyChecked)
+            check.blockSignals(False)
+        self.organize.setEnabled(self.task is None and not self.plan.cancelled and any(e.selected for e in entries))
     def item_changed(self, item):
-        if self.plan and item.column() == 0:
+        if self.plan and item.column() == 0 and self.plan.entries[item.row()].identity:
             self.plan.entries[item.row()].selected = item.checkState() == Qt.Checked
-            self.render(); self.set_busy(False)
+            self.update_selection()
     def toggle_category(self, name, state):
         if self.plan:
             for entry in self.plan.entries:
                 if entry.category == name and entry.identity:
                     entry.selected = state != Qt.Unchecked.value
-            self.render(); self.set_busy(False)
+            self.update_selection()
+    def show_help(self):
+        HelpDialog(self.settings.language, self).exec()
     def edit_rules(self):
         dialog = RuleDialog(self.settings.rules, self.settings.language, self)
         if dialog.exec() == QDialog.Accepted:

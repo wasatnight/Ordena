@@ -1,4 +1,6 @@
 """All user-visible interface text, with English as the initial language."""
+from .help_content import ENGLISH_HELP, SPANISH_HELP
+
 TEXT = {
  'tagline': ('A clear folder. A calmer workspace.', 'Una carpeta ordenada. Un espacio más tranquilo.'),
  'choose': ('Choose folder', 'Seleccionar carpeta'),
@@ -61,9 +63,17 @@ TEXT = {
  'Images': ('Images', 'Imágenes'), 'Documents': ('Documents', 'Documentos'),
  'Videos': ('Videos', 'Videos'), 'Audio': ('Audio', 'Audio'),
  'Archives': ('Archives', 'Comprimidos'), 'Installers': ('Installers', 'Instaladores'),
- 'offline': ('LOCAL & OFFLINE  /  v1.0', 'LOCAL Y SIN INTERNET  /  v1.0'),
+ 'offline': ('LOCAL & OFFLINE  /  v1.1.0', 'LOCAL Y SIN INTERNET  /  v1.1.0'),
  'rule_hint': ('Names below are the actual destination folder names. Changing the interface language does not rename folders.', 'Estos son los nombres reales de las carpetas de destino. Cambiar el idioma de la interfaz no renombra carpetas.'),
 }
+
+TEXT.update({
+    'help_title': ('How Ordena works', 'Cómo funciona Ordena'),
+    'language': ('Interface language', 'Idioma de la interfaz'),
+    'close': ('Close', 'Cerrar'),
+    'help_body': (ENGLISH_HELP, SPANISH_HELP),
+})
+
 
 def tr(key, language='en', **values):
     pair = TEXT.get(key, (key, key))
