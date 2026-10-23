@@ -71,3 +71,5 @@ Cierre de la versión 1.1.0: 44 pruebas aprobadas en Windows sin omisiones; comp
 ## Actualización visual 1.1.1
 
 Corrección del usuario: quería fondos rosa claro en toda la app y letras azules. Implementado en tema, paleta Qt, textos de estado y CSS de ayuda; controles SVG actualizados, icono original conservado. El subtítulo se reduce a «Tus carpetas ordenadas» en español y «Your folders, organized» en inglés, manteniendo inglés como idioma inicial. Distribución, selecciones, ayuda y motor sin otros cambios. Las 17 pruebas de interfaz pasan localmente; el flujo Windows valida las 44 pruebas, empaquetado y arranque de la versión 1.1.1. Consultar VALIDATION.md para el resultado final.
+
+Cierre 1.1.1: 44 pruebas aprobadas en Windows sin omisiones; empaquetado, iconos y arranque sin Python en PATH aprobados. Ejecución https://github.com/wasatnight/Ordena/actions/runs/39937427950; código probado 60eaa418b4a8731eea3fd71829257811ce200e70; artefacto 12493209908. La entrega usa esos binarios verificados con documentación actualizada. Las últimas modificaciones posteriores al código probado son únicamente el informe de validación y este contexto.
