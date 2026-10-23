@@ -1,8 +1,14 @@
 # Ordena
 
-A free, offline Windows desktop app for organizing a mixed folder. Built with Python 3.12 and PySide6. **English is the initial language; choose Español in the top-right selector.** Language, category rules and last selected folder are remembered.
+**Version 1.1.0** · A free, offline Windows desktop app for organizing a mixed folder. Built with Python 3.12 and PySide6. **English is the initial language; choose Español in the top-right selector.** Language, category rules and last selected folder are remembered.
 
-[Instrucciones en español](README.es.md)
+[Instrucciones en español](README.es.md) · [What changed](CHANGELOG.md)
+
+## New in 1.1.0
+
+Original app icon for Windows, a soft blush accent, centered brand/subtitle, clearer inclusion controls, a consistent language menu, and a **?** button with offline step-by-step help and examples in both languages. Click a checkbox or file name, or press Space, to include/exclude a file. Selection updates keep the same table items and scroll position. A category dash means only some of its files are included.
+
+![Ordena icon](ordena/assets/app-icon.png)
 
 ![Ordena preview](assets/ordena-en.png)
 
@@ -44,7 +50,7 @@ Or run `python -m venv .venv`, then `.\.venv\Scripts\python.exe -m pip install -
 .\build.ps1
 ```
 
-The build produces `dist/Ordena/Ordena.exe`; distribute its entire folder. `--smoke-test` opens the app then closes it automatically for startup verification. Tests use synthetic files in temporary directories only. All 35 tests, Windows packaging and executable startup without Python on PATH passed in [Windows CI](https://github.com/wasatnight/Ordena/actions/runs/39929305957). See [VALIDATION.md](VALIDATION.md) for actual results and limitations, and [CONTEXTO_PROYECTO.md](CONTEXTO_PROYECTO.md) to continue development.
+The build produces `dist/Ordena/Ordena.exe`; distribute its entire folder. `--smoke-test` opens the app then closes it automatically for startup verification. Tests use synthetic files in temporary directories only. The 1.0 baseline passed all 35 tests in [Windows CI](https://github.com/wasatnight/Ordena/actions/runs/39929305957). Version 1.1.0 adds nine interface regression checks (44 tests total), plus verification of all nine embedded Windows icon sizes and packaged icon resources. See the current [Windows validation runs](https://github.com/wasatnight/Ordena/actions) and validation report for version-specific results. See [VALIDATION.md](VALIDATION.md) for actual results and limitations, and [CONTEXTO_PROYECTO.md](CONTEXTO_PROYECTO.md) to continue development.
 
 ## Structure
 
@@ -53,6 +59,10 @@ The build produces `dist/Ordena/Ordena.exe`; distribute its entire folder. `--sm
 - `safety.py`, `executor.py`: Windows guards, locking, execution and undo.
 - `journal.py`, `settings.py`: durable movement history and preferences.
 - `workers.py`: cancellable background tasks.
+- `controls.py`, `theme.py`, `help_content.py`: inclusion controls, blush styling and localized offline help.
+- `ordena/assets/`: original SVG/ICO artwork and UI indicators.
+- `tools/generate_icons.py`: regenerate the ICO/PNG from the SVG.
+- `tools/verify_build.py`: verify the executable embeds all original ICO frames.
 - `tests/`: filesystem safety and interface integration tests.
 
 Automatic watching, background/startup operation, recursion, AI, duplicate deletion, cloud sync and donations are deliberately deferred. Authenticode signing, an installer and testing on a separate clean Windows machine remain future distribution work.

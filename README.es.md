@@ -1,4 +1,4 @@
-# Ordena — Español
+# Ordena 1.1.0 — Español
 
 Aplicación gratuita de escritorio para Windows que organiza una carpeta local. **Se abre inicialmente en inglés. Selecciona Español arriba a la derecha para traducir la interfaz.** Recuerda idioma, reglas y última carpeta seleccionada.
 
@@ -37,5 +37,14 @@ Selecciona `.venv` como intérprete en VS Code. `build.ps1` genera `dist/Ordena/
 
 Consulta [VALIDATION.md](VALIDATION.md) para conocer pruebas y limitaciones, [CONTEXTO_PROYECTO.md](CONTEXTO_PROYECTO.md) para continuar el proyecto y [README.md](README.md) para los detalles técnicos. No se probaron carpetas personales. Quedan fuera de esta versión vigilancia automática, inicio con Windows, recursión, IA, eliminación de duplicados, nube y donaciones. Instalador, firma de editor y prueba en otro Windows están pendientes.
 
-Validación independiente completada: **35 pruebas aprobadas, compilación y arranque del ejecutable sin Python en PATH**. [Ver ejecución en Windows](https://github.com/wasatnight/Ordena/actions/runs/39929305957). El portable entregado proviene de esa compilación.
+Referencia de la versión 1.0: **35 pruebas aprobadas, compilación y arranque del ejecutable sin Python en PATH**. [Ver ejecución en Windows](https://github.com/wasatnight/Ordena/actions/runs/39929305957). El portable entregado proviene de esa compilación.
+
+
+## Novedades de esta versión
+
+Icono original en ventana, barra de tareas y ejecutable; acento rosa casi blanco; nombre centrado con subtítulo debajo; casillas visibles y estables; menú de idioma con contraste uniforme. Ya no se resalta toda una fila al pulsarla. Pulsa la casilla o el nombre para incluir/excluir; también puedes usar Espacio. No se reconstruye la tabla en cada clic y conserva el desplazamiento. Un guion en una categoría significa selección parcial.
+
+Las instrucciones se encuentran en el botón **?**, con pasos y ejemplos en el idioma elegido. El icono incluye nueve tamaños de Windows (16 a 256 px); sus fuentes están en `ordena/assets/` y se pueden regenerar con `python tools/generate_icons.py`.
+
+Esta versión incorpora nueve pruebas de regresión de interfaz: 44 pruebas en total. Consulta [VALIDATION.md](VALIDATION.md) y las [ejecuciones de Windows](https://github.com/wasatnight/Ordena/actions) para los resultados de la versión actual.
 

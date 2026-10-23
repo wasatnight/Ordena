@@ -55,3 +55,13 @@ Código y pruebas completos en esta carpeta, con empaquetado portable disponible
 
 La validación independiente de Windows terminó correctamente: 35 pruebas aprobadas, compilación y arranque sin Python en PATH. Ejecución: https://github.com/wasatnight/Ordena/actions/runs/39929305957. El ZIP portable de la entrega proviene de ese artefacto verificado; la compilación local no pudo confirmar arranque en el sandbox. Repositorio publicado completo y copia de código local comparada con el árbol remoto.
 
+
+## Actualización 1.1.0
+
+Solicitud del usuario: icono propio, acento rosa casi blanco, título centrado con subtítulo del mismo estilo debajo, selecciones estables y ayuda en un botón ?.
+
+Implementado en `theme.py`, `controls.py`, `help_content.py` y `ui.py`. La selección ya no invoca `render()` para reconstruir la tabla; `update_selection()` actualiza casillas, estados y conteos en los mismos objetos. Se probaron clics reales con QTest, teclado, scroll conservado y selección parcial. El botón ? abre ejemplos localizados sin conexión.
+
+Icono vectorial original en `ordena/assets/app.svg`; generador de ICO/PNG en `tools/generate_icons.py`; ICO con nueve tamaños. Se aplica QIcon a la aplicación/ventanas, AppUserModelID a Windows y --icon/--add-data al empaquetado. `tools/verify_build.py` compara los recursos RT_ICON del EXE con las imágenes originales del ICO. El smoke test confirma versión e iconos empaquetados en smoke.json dentro del directorio de datos de prueba.
+
+Pruebas: 44 en total (17 de interfaz). En el sandbox local se omiten las dos pruebas de creación de enlaces por restricciones del entorno; todas las pruebas de interfaz están aprobadas. Los resultados del nuevo runner Windows se registran en VALIDATION.md. El motor de movimientos y el registro persistente no han cambiado.
