@@ -30,7 +30,7 @@ jobs:
           if ($process.ExitCode -ne 0) { throw "Executable exited with $($process.ExitCode)" }
           if (-not (Test-Path "$env:ORDENA_DATA_DIR\history.sqlite3")) { throw 'UI did not initialize its journal' }
           $smoke = Get-Content "$env:ORDENA_DATA_DIR\smoke.json" -Raw | ConvertFrom-Json
-          if (-not $smoke.icons_loaded -or $smoke.version -ne '1.1.0') { throw 'Packaged icon/version check failed' }
+          if (-not $smoke.icons_loaded -or $smoke.version -ne '1.1.1') { throw 'Packaged icon/version check failed' }
       - uses: actions/upload-artifact@v4
         with:
           name: Ordena-Windows-portable
